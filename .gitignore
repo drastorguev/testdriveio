@@ -1,2 +1,9 @@
 __pycache__
 env
+
+users-service/project/__pycache__
+users-service/env
+
+users-service/project/tests/__pycache__
+
+users-service/project/api/__pycache__
