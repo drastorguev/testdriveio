@@ -1,0 +1,13 @@
+version: '3.3'
+
+services:
+
+  users-service:
+    container_name: users-service
+    build:
+      context: ./users-service
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './users-service:/usr/src/app'
+    ports:
+      - 5001:5000
