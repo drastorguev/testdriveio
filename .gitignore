@@ -9,3 +9,5 @@ users-service/project/tests/__pycache__
 users-service/project/api/__pycache__
 
 htmlcov
+
+client/src/components/__snapshots__
