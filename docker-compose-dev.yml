@@ -1,6 +1,7 @@
 version: '3.3'
 
 services:
+
   users-service:
     container_name: users-service
     build:
@@ -11,6 +12,7 @@ services:
     ports:
       - 5001:5000
     environment:
+      - SECRET_KEY=my_precious
       - APP_SETTINGS=project.config.DevelopmentConfig
       - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_dev
       - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
@@ -38,7 +40,6 @@ services:
       - 80:80
     depends_on:
       - users-service
-      - client
     links:
       - users-service
 
@@ -50,7 +51,7 @@ services:
     volumes:
       - './services/client:/usr/src/app'
     ports:
-      - '3007:3000'
+      - '3007:3000' # expose ports - HOST:CONTAINER
     environment:
       - NODE_ENV=development
       - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}

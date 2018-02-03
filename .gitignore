@@ -9,5 +9,7 @@ users-service/project/tests/__pycache__
 users-service/project/api/__pycache__
 
 htmlcov
+htmlcov/
+jest_0/
 
 client/src/components/__snapshots__
