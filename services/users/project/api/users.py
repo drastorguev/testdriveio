@@ -8,6 +8,8 @@ from project import db
 
 from sqlalchemy import exc
 
+from project.api.utils import authenticate, is_admin
+
 users_blueprint = Blueprint('users', __name__, template_folder='./templates')
 
 
@@ -36,12 +38,16 @@ def get_all_users():
 
 
 @users_blueprint.route('/users', methods=['POST'])
-def add_user():
+@authenticate
+def add_user(resp):
     post_data = request.get_json()
     response_object = {
         'status': 'fail',
         'message': 'Invalid payload.'
     }
+    if not is_admin(resp):
+        response_object['message'] = 'You do not have permission to do that.'
+        return jsonify(response_object), 401
     if not post_data:
         return jsonify(response_object), 400
     username = post_data.get('username')
@@ -59,9 +65,19 @@ def add_user():
         else:
             response_object['message'] = 'Sorry. That email already exists.'
             return jsonify(response_object), 400
+    except exc.IntegrityError as e:
+        db.session.rollback()
+        return jsonify(response_object), 400
     except (exc.IntegrityError, ValueError) as e:
         db.session.rollback()
         return jsonify(response_object), 400
+
+@users_blueprint.route('/users/ping', methods=['GET'])
+def ping_pong():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!'
+    })
 
 
 @users_blueprint.route('/users/<user_id>', methods=['GET'])
