@@ -16,3 +16,5 @@ jest_0/
 client/src/components/__snapshots__
 
 key.txt
+
+node_modules

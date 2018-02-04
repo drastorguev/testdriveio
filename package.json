@@ -1,0 +1,10 @@
+{
+  "name": "testdriven-app",
+  "devDependencies": {
+    "randomstring": "^1.1.5",
+    "testcafe": "^0.18.2"
+  },
+  "scripts": {
+    "testcafe": "testcafe"
+  }
+}
