@@ -8,8 +8,7 @@ import renderer from 'react-test-renderer';
 const users = [
   {
     'active': true,
-    'email': 'michael@realpython.com',
-    'id': 1,
+    'id': 1,4§§§1231  qqaa~
     'username': 'michael'
   },
   {
