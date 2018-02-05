@@ -50,6 +50,7 @@ const tableRow = Selector('td').withText(username).parent();
     .expect(Selector('a').withText('Log Out').exists).ok()
     .expect(Selector('a').withText('Register').exists).notOk()
     .expect(Selector('a').withText('Log In').exists).notOk()
+    .expect(Selector('.alert-success').withText('Welcome!').exists).ok()
     // log a user out
   await t
     .click(Selector('a').withText('Log Out'))
@@ -60,4 +61,51 @@ const tableRow = Selector('td').withText(username).parent();
     .expect(Selector('a').withText('Log Out').exists).notOk()
     .expect(Selector('a').withText('Register').exists).ok()
     .expect(Selector('a').withText('Log In').exists).ok()
+});
+
+test(`should display the page correctly if a user is not logged in`, async (t) => {
+await t
+.navigateTo(TEST_URL)
+.expect(Selector('H1').withText('All Users').exists).ok()
+.expect(Selector('a').withText('User Status').exists).notOk()
+.expect(Selector('a').withText('Log Out').exists).notOk()
+.expect(Selector('a').withText('Register').exists).ok()
+.expect(Selector('a').withText('Log In').exists).ok()
+.expect(Selector('.alert').exists).notOk()
+});
+
+
+test(`should throw an error if the credentials are incorrect`, async (t) => {
+// attempt to log in
+await t
+.navigateTo(`${TEST_URL}/login`)
+.typeText('input[name="email"]', 'incorrect@email.com')
+.typeText('input[name="password"]', password)
+.click(Selector('input[type="submit"]'))
+// assert user login failed
+await t
+.expect(Selector('H1').withText('Login').exists).ok()
+.expect(Selector('a').withText('User Status').exists).notOk()
+.expect(Selector('a').withText('Log Out').exists).notOk()
+.expect(Selector('a').withText('Register').exists).ok()
+.expect(Selector('a').withText('Log In').exists).ok()
+.expect(Selector('.alert-success').exists).notOk()
+.expect(Selector('.alert-danger').withText(
+'User does not exist.').exists).ok()
+// attempt to log in
+await t
+.navigateTo(`${TEST_URL}/login`)
+.typeText('input[name="email"]', email)
+.typeText('input[name="password"]', 'incorrectpassword')
+.click(Selector('input[type="submit"]'))
+// assert user login failed
+await t
+.expect(Selector('H1').withText('Login').exists).ok()
+.expect(Selector('a').withText('User Status').exists).notOk()
+.expect(Selector('a').withText('Log Out').exists).notOk()
+.expect(Selector('a').withText('Register').exists).ok()
+.expect(Selector('a').withText('Log In').exists).ok()
+.expect(Selector('.alert-success').exists).notOk()
+.expect(Selector('.alert-danger').withText(
+'User does not exist.').exists).ok()
 });

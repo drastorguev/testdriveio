@@ -20,6 +20,7 @@ valid: false,
 };
 this.handleUserFormSubmit = this.handleUserFormSubmit.bind(this);
 this.handleFormChange = this.handleFormChange.bind(this);
+this.createMessage = this.createMessage;
 };
 componentDidMount() {
 this.clearForm();
@@ -64,7 +65,14 @@ axios.post(url, data)
 this.clearForm();
 this.props.loginUser(res.data.auth_token);
 })
-.catch((err) => { console.log(err); });
+.catch((err) => {
+  if (formType === 'login') {
+this.props.createMessage('User does not exist.', 'danger');
+};
+if (formType === 'register') {
+this.props.createMessage('That user already exists.', 'danger');
+};
+});
 };
 
 allTrue() {
@@ -124,8 +132,7 @@ if (self.allTrue()) self.setState({valid: true});
 
 validateEmail(email) {
 // eslint-disable-next-line
-var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]
-{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+var re = new RegExp('^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 return re.test(email);
 };
 
@@ -147,6 +154,22 @@ formType={this.props.formType}
 formRules={formRules}
 />
 <form onSubmit={(event) => this.handleUserFormSubmit(event)}>
+  <Route exact path='/register' render={() => (
+<Form
+formType={'register'}
+isAuthenticated={this.state.isAuthenticated}
+loginUser={this.loginUser}
+createMessage={this.createMessage}
+/>
+)} />
+<Route exact path='/login' render={() => (
+<Form
+formType={'login'}
+isAuthenticated={this.state.isAuthenticated}
+loginUser={this.loginUser}
+createMessage={this.createMessage}
+/>
+)} />
 {this.props.formType === 'register' &&
 <div className="form-group">
 <input
