@@ -21,6 +21,11 @@ class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     BCRYPT_LOG_ROUNDS = 4
 
+class StagingConfig(BaseConfig):
+    """Staging configuration"""
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+
 
 class TestingConfig(BaseConfig):
     """Testing configuration"""
